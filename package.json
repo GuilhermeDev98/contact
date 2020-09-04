@@ -1,0 +1,24 @@
+{
+  "name": "appname",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Guilherme Da Silva Santos <guilhermedev@hotmail.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "packages/shared/*"
+    ]
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/preset-react": "^7.10.4",
+    "@contact/eslint-config": "*",
+    "jest": "^26.4.2"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "test": "jest"
+  }
+}
