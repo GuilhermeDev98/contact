@@ -13,7 +13,7 @@ export default createGlobalStyle`
         background: ${props => props.theme.colors.primary};
         font-size: 14px;
         color: ${props => props.theme.colors.white};
-        font-family: sans-serif;
+        font-family: ${props => props.theme.fontFamily}, sans-serif;
     }
 
     #root{
@@ -40,10 +40,10 @@ export default createGlobalStyle`
         color: ${props => props.theme.colors.black};
         padding-left: 4%;
         padding-right: 4%;
-        font-weight: bolder;
         border: 2px solid ${props => props.theme.colors.gray};
         border-radius: 5px;
         margin-bottom: 10px;
+        font-weight: normal;
     }
     input.negative{
         border: 2px solid red;
