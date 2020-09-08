@@ -15,8 +15,7 @@ module.exports = (req, res, next) => {
         .status(500)
         .json({ data: null, message: 'Failed to authenticate token!' })
     }
-
-    req.userId = decoded.id
+    req.user = decoded.userData
     next()
   })
 }

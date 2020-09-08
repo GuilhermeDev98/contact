@@ -24,6 +24,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use('/api/v1/', routes)
 
-server.listen(3333, () => {
-  console.log('Server Running')
+server.listen(process.env.APP_PORT, () => {
+  console.log(`Server Running On Port ${process.env.APP_PORT}`)
 })
