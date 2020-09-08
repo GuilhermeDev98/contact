@@ -2,8 +2,22 @@ const DB = require('../config/Database')
 const ObjectID = require('mongodb').ObjectID
 const { v4: uuidv4 } = require('uuid')
 
+const getTimestamp = () => {
+  const date = new Date()
+  const hour = `${date.getHours()}`.padStart(2, '0')
+  const minute = `${date.getMinutes()}`.padStart(2, '0')
+  const second = `${date.getSeconds()}`.padStart(2, '0')
+
+  const day = `${date.getDate()}`.padStart(2, '0')
+  const month = `${date.getMonth()}`.padStart(2, '0')
+  const year = date.getFullYear()
+  return `${hour}:${minute}:${second} ${day}/${month}/${year}`
+}
+
 exports.store = (req, res) => {
   const { message } = req.body
+
+  console.log(req.params.chat_id, req.user.id, req.params.to)
 
   DB.connect(async (err, db) => {
     if (err) {
@@ -12,22 +26,22 @@ exports.store = (req, res) => {
         .json({ data: null, message: 'Database Error! Try Again !' })
     }
 
-    const bla = await db.collection('chat').findOneAndUpdate(
-      { _id: ObjectID('5f5769b014f502df5d31bd0e') },
+    const chat = await db.collection('chat').findOneAndUpdate(
+      { _id: ObjectID(`${req.params.chat_id}`) },
       {
         $push: {
           messages: {
             id: uuidv4(),
-            from: '12345',
-            to: '123456',
+            from: req.user.id,
+            to: req.params.to,
             message: message,
-            timestamps: '08:46:00'
+            timestamps: getTimestamp()
           }
         }
       }
     )
 
-    return res.status(200).json({ data: [bla.value] })
+    return res.status(200).json({ data: [chat.value] })
   })
 }
 
@@ -42,3 +56,16 @@ exports.store = (req, res) => {
     }
   ]
 } */
+
+/* db.chat.insertOne({
+  users: ['5f57d716677752b8ef410962', '5f57d716677752b8ef410962'],
+  messages: [
+    {
+      from: '5f57d716677752b8ef410962',
+      to: '5f57d716677752b8ef410962',
+      text: 'Olá Mundo !',
+      timestamps: '08:21:00 08/09/2020'
+    }
+  ]
+})
+ */
