@@ -22,6 +22,11 @@ const routes = require('./routes')
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url} ${JSON.stringify(req.body)}`)
+  next()
+})
 app.use('/api/v1/', routes)
 
 server.listen(process.env.APP_PORT, () => {

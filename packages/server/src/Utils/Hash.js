@@ -1,0 +1,14 @@
+const bcrypt = require('bcrypt')
+const saltRounds = 10
+
+const Hash = password => {
+  const salt = bcrypt.genSaltSync(saltRounds)
+  const hash = bcrypt.hashSync(password, salt)
+  return hash
+}
+
+const Compare = async (plainPassword, hashedPassword) => {
+  return bcrypt.compareSync(plainPassword, hashedPassword)
+}
+
+module.exports = { Hash, Compare }

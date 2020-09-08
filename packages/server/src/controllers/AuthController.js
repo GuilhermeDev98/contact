@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const { Compare } = require('../Utils/Hash')
 const DB = require('../config/Database')
 
 exports.login = (req, res) => {
@@ -11,32 +12,28 @@ exports.login = (req, res) => {
         .json({ data: null, message: 'Database Error! Try Again !' })
     }
 
-    const findUserByEmail = await db
-      .collection('users')
-      .find({ email })
-      .toArray()
+    const user = await db.collection('users').find({ email }).toArray()
 
-    if (findUserByEmail.length === 0) {
+    if (user.length === 0) {
       return res
         .status(500)
         .json({ data: null, message: 'User Not Found !', field: 'email' })
     }
 
-    const user = await db
-      .collection('users')
-      .find({ email, password })
-      .toArray()
-
-    if (user.length === 1) {
+    if (await Compare(password, user[0].password)) {
       const userData = {
         id: user[0]._id,
         name: user[0].name,
         email: user[0].email
       }
       const token = jwt.sign({ userData }, process.env.JWT_TOKEN, {
-        expiresIn: 300
+        expiresIn: 300 * 60
       })
       return res.status(200).json({ data: { token } })
+    } else {
+      return res
+        .status(500)
+        .json({ data: null, message: 'Password Incorrect!', field: 'password' })
     }
   })
 }

@@ -1,7 +1,9 @@
 const DB = require('../config/Database')
+const { Hash } = require('../Utils/Hash')
 
 exports.store = (req, res) => {
-  const { name, email, password } = req.body
+  let { name, email, password } = req.body
+  password = Hash(password)
   DB.connect(async (err, db) => {
     if (err) {
       return res
