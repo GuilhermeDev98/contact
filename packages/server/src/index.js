@@ -1,12 +1,29 @@
-import express from 'express'
-import cors from 'cors'
-import routes from './routes'
+require('dotenv-safe').config()
+
+const express = require('express')
+const cors = require('cors')
+const bodyParser = require('body-parser')
 
 const app = express()
+const server = require('http').createServer(app)
+const io = require('socket.io')(server)
+
+var connections = {}
+
+io.sockets.on('connection', socket => {
+  socket.on('username', function (username) {
+    connections[username] = socket.id
+    console.log(connections)
+  })
+})
+
+const routes = require('./routes')
 
 app.use(cors())
-app.use(routes)
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+app.use('/api/v1/', routes)
 
-app.listen(3333, () => {
+server.listen(3333, () => {
   console.log('Server Running')
 })

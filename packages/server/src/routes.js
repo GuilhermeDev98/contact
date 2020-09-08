@@ -1,13 +1,13 @@
-import express from 'express'
+const express = require('express')
 
 const routes = express.Router()
 
-routes.get('/', (request, response) => {
-  return response.json({ message: 'Hello World !' })
-})
+const VerifyJWT = require('./middlewares/VerifyJWT')
 
-routes.post('/posts', (request, response) => {
-  return response.json({ message: 'New Post' })
-})
+const AuthController = require('./controllers/AuthController')
+const ChatController = require('./controllers/ChatController')
 
-export default routes
+routes.post('/auth/login', AuthController.login)
+routes.get('/chat', VerifyJWT, ChatController.store)
+
+module.exports = routes

@@ -1,0 +1,12 @@
+// Status 200
+
+return res
+    .status(200)
+    .json({ data: ... })
+
+
+// Status 400
+
+return res
+    .status(400)
+    .json({ data: null, message: ... })
